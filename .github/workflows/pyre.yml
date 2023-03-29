@@ -56,7 +56,7 @@ jobs:
 
       - name: Run Pyre
         run: |
-          pyre --noninteractive --output=sarif check > sarif.json
+          pyre --source-directory ccb --noninteractive --output=sarif check > sarif.json
         shell: bash
 
       - name: Saving results in SARIF
