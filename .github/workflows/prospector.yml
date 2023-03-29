@@ -18,6 +18,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install .
-        python -m pip install --upgrade prospector[with_mypy] prospector[with_vulture] types-requests types-python-dateutil types-PyYAML mypy vulture
+        python -m pip install --upgrade prospector[with_mypy] prospector[with_vulture] types-requests types-python-dateutil types-PyYAML types-setuptools mypy vulture
     - name: Analysing the code with prospector
-      run: prospector  --with-tool vulture  --with-tool mypy --strictness veryhigh --max-line-length 200 *.py
+      run: prospector  --with-tool vulture  --with-tool mypy --strictness veryhigh --max-line-length 200
