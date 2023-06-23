@@ -105,6 +105,24 @@ jobs:
           git config --global user.email "quentin.chateau@gmail.com"
           git config --global user.name "Quentin Chateau via Conan Center Bot"
 
+      - name: Clean branches
+        run: |
+          git ls-remote --heads origin | cut -f 2 | grep refs/heads/ccb- | while read -r git_ref ; do
+            branch_name=${git_ref:11}
+            echo "::group::$branch_name"
+            wait
+            if ! git merge --no-ff --no-commit origin/$branch_name ; then
+              echo "::warning  ::branch $branch_name has conflict with master"
+            elif git diff --cached --quiet ; then
+              echo "::warning  ::branch $branch_name has no change from master, deleting it"
+              git push origin --delete $branch_name
+            fi
+            git merge --abort
+            echo "::endgroup::"
+          done
+          wait
+        working-directory: conan-center-index
+
       - name: Update recipes
         run: |
           mkdir status
