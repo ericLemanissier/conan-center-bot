@@ -179,6 +179,12 @@ async def test_recipe(recipe, version_str):
         if cleanup_code != 0:
             logger.warning("%s: failed to cleanup after test", recipe.name)
 
+        cleanup_code = await call(
+            ["conan", "remove", "*", "-b", "-f", "-s"]
+        )
+        if cleanup_code != 0:
+            logger.warning("%s: failed to cleanup after test", recipe.name)
+
     if code != 0:
         logger.info(output)
         logger.error(
