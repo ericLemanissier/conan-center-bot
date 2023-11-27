@@ -10,6 +10,7 @@ permissions:
 env:
   CONAN_SYSREQUIRES_MODE: enabled
   PYTHONUNBUFFERED: 1
+  NOT_ON_C3I: 1
 
 jobs:
   ci-frontend:
