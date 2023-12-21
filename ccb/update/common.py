@@ -154,16 +154,12 @@ async def add_version(recipe, upstream_version):
 
 
 async def test_recipe(recipe, version_str):
-    env = os.environ.copy()
-    env["CONAN_HOOK_ERROR_LEVEL"] = "40"
-
     async with test_lock.get():
         t0 = time.time()
         logger.info("%s: running test", recipe.name)
         reference = f"{recipe.name}/{version_str}@"
         process = await run(
-            ["conan", "create", ".", reference, "--build=missing"],
-            env=env,
+            ["conan", "create", ".", f"--version={version_str}", "--build=missing"],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             cwd=recipe.folder_path,
@@ -174,13 +170,7 @@ async def test_recipe(recipe, version_str):
         duration = time.time() - t0
 
         cleanup_code = await call(
-            ["conan", "remove", reference, "-b", "-f", "-p", "-s"]
-        )
-        if cleanup_code != 0:
-            logger.warning("%s: failed to cleanup after test", recipe.name)
-
-        cleanup_code = await call(
-            ["conan", "remove", "*", "-b", "-f", "-s"]
+            ["conan", "remove", "-c", reference]
         )
         if cleanup_code != 0:
             logger.warning("%s: failed to cleanup after test", recipe.name)

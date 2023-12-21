@@ -5,7 +5,7 @@ import inspect
 import logging
 import importlib.util
 
-from conans import ConanFile
+from conan import ConanFile
 
 from .version import Version
 from .upstream_project import get_upstream_project
