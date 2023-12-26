@@ -63,8 +63,8 @@ export default {
       if (!this.githubActionRunId) {
         return null
       }
-      const user = window.location.host.split('.')[0];
-      const repo = window.location.pathname.split('/')[1];
+      const user = window.location.host.split('.')[0]
+      const repo = window.location.pathname.split('/')[1]
       return `https://github.com/${user}/${repo}/actions/runs/` + this.githubActionRunId
     },
     recipes () {

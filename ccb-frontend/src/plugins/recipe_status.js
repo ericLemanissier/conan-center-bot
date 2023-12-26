@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const user = window.location.host.split('.')[0];
-const repo = window.location.pathname.split('/')[1];
+const user = window.location.host.split('.')[0]
+const repo = window.location.pathname.split('/')[1]
 
 const url = `https://raw.githubusercontent.com/${user}/${repo}/status/prod/v1-update.json`
 
