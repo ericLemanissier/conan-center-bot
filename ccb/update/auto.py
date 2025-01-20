@@ -96,9 +96,6 @@ def get_error_category(error):
     if "Invalid configuration:" in error:
         return "Invalid configuration"
 
-    if "Hook validation failed" in error:
-        return "Hook validation failed"
-
     if "Package recipe with version" in error:
         return "Bad recipe version"
 

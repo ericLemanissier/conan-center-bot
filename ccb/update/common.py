@@ -23,7 +23,6 @@ from ..git import (
 logger = logging.getLogger(__name__)
 test_lock = LockStorage()
 
-RE_HOOK_ERROR = re.compile(r"^\[HOOK.*\].*:\s*ERROR:\s*(.*)$", re.M)
 RE_TEST_ERRORS = [
     re.compile(r"^ERROR:.*(Error in.*)", re.M | re.S),
     re.compile(r"^ERROR:.*(Invalid configuration.*)", re.M | re.S),
@@ -54,10 +53,6 @@ class UpdateStatus(typing.NamedTuple):
 
 
 def get_test_details(output):
-    matches = list(RE_HOOK_ERROR.finditer(output))
-    if matches:
-        errors = [match.group(1) for match in matches]
-        return "Hook validation failed:\n" + "\n".join(errors)
 
     for regex in RE_TEST_ERRORS:
         match = regex.search(output)
@@ -154,16 +149,12 @@ async def add_version(recipe, upstream_version):
 
 
 async def test_recipe(recipe, version_str):
-    env = os.environ.copy()
-    env["CONAN_HOOK_ERROR_LEVEL"] = "40"
-
     async with test_lock.get():
         t0 = time.time()
         logger.info("%s: running test", recipe.name)
         reference = f"{recipe.name}/{version_str}@"
         process = await run(
             ["conan", "create", ".", reference, "--build=missing"],
-            env=env,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             cwd=recipe.folder_path,
